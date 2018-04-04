@@ -1,9 +1,9 @@
 <?php
 //urlap feldolgozasa
 if(isset($_POST['rendben'])){
-    print_r($_POST);
+    //print_r($_POST);
     //valtozok tisztitasa
-    $nev = strip_tags(ucwords(strtolower(trim($_POST['nev'])));
+    $nev = strip_tags(ucwords(strtolower(trim($_POST['nev']))));
     $cegnev = strip_tags(trim($_POST['cegnev']));
     $Mobil = strip_tags(trim($_POST['Mobil']));
     $Email = strip_tags(strtolower(trim($_POST['Email'])));
@@ -16,10 +16,19 @@ if(isset($_POST['rendben'])){
 
     if(!empty($Email) && !filter_var($Email,FILTER_VALIDATE_EMAIL)) $hibak[]= "Rossz e-mail cimet adtal meg!";
 
-    $sql="INSERT INTO `nevjegyek` (`nev`, `cegnev`, `Mobil`, `Email`) VALUES ('{$nev}', '{$cegnev}', '{$Mobil}', '{$Email}');";
+    if(isset($hibak)) {
+        $kimenet = "<ul>\n";
+        foreach($hibak as $hiba){
+            $kimenet.= "<li>{$hiba}</li>\n";
+        }
+        $kimenet.="</ul>";
+    }else{
+    //Felvitel az adatbazisba
     require("../kapcsolat.php");
+    $sql="INSERT INTO `nevjegyek` (`nev`, `cegnev`, `Mobil`, `Email`) VALUES ('{$nev}', '{$cegnev}', '{$Mobil}', '{$Email}');";
     mysqli_query($dbconn,$sql);
     header("Location:lista.php");
+    }
 }
 //urlap megjelenitese
 ?><!DOCTYPE html>
@@ -35,17 +44,20 @@ if(isset($_POST['rendben'])){
 <body>
     <h1>Nevjegykartyak</h1>
     <form method="post" action="">
+    <?php
+        if(isset($kimenet)) print $kimenet;
+    ?>
     <p><label for="nev">Nev:*</label></br>
-       <input type="text" id="nev" name="nev" required>
+       <input type="text" id="nev" name="nev" value="<?php if(isset($nev)) print $nev ?>">
     </p>
     <p><label for="cegnev">Cegnev:</label></br>
-       <input type="text" id="cegnev" name="cegnev">
+       <input type="text" id="cegnev" name="cegnev" value="<?php if(isset($cegnev)) print $cegnev ?>">
     </p>
     <p><label for="Mobil">Mobil:</label></br>
-       <input type="tel" id="Mobil" name="Mobil">
+       <input type="tel" id="Mobil" name="Mobil" value="<?php if(isset($Mobil)) print $Mobil ?>">
     </p>
     <p><label for="Email">Email:</label></br>
-       <input type="mail" id="Email" name="Email">
+       <input type="mail" id="Email" name="Email" value="<?php if(isset($Email)) print $Email ?>">
     </p>
     <p><em>A *-al jelolt mezok kitoltese kotelezo</em></p>
     <input type="submit" id="rendben" name="rendben" value="Rendben">

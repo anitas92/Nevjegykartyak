@@ -16,6 +16,7 @@ $kimenet = "<table>
 <th>Cegnev</th>
 <th>Mobil</th>
 <th>Email</th>
+<th>Müvelet</th>
 </tr>";
 while ($sor = mysqli_fetch_assoc($eredmeny)){
     $kimenet.="<tr>
