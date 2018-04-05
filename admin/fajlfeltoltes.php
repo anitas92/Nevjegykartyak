@@ -1,13 +1,33 @@
 <?php
+
+function ekezettelen($szoveg){
+    $mit  = array("é","á","í","ó","ö","ü","ő","ű","ú","É","Á","Ó","Ö","Ü","Ő","Ű","Ú","_"," ");
+    $mire = array("e","a","i","o","o","u","o","u","u","E","A","O","O","U","O","U","U","-","-");
+    return str_replace($mit, $mire, $szoveg);
+}
+
 if (isset($_POST['rendben'])){
-   $kimenet = "<h3>Feltoltott fajl adatai</h3>
-   <ul>
-   <li>Fajlnev: {$_FILES['fajl'] ['name']}</li>
-   <li>Ideiglenes nev: {$_FILES['fajl'] ['tmp_name']}</li>
-   <li>Hibakod: {$_FILES['fajl'] ['error']}</li>
-   <li>Fajlmeret: {$_FILES['fajl'] ['size']} bytes</li>
-   <li>Fajltipus: {$_FILES['fajl'] ['type']} </li>
-   </ul>";
+   
+    //engedelyezett mime tipusok
+    $mime = ["image/jpeg", "image/pjpeg", "image/gif", "image/png"];
+
+    //fajltipus es meret korlatozasaink
+   if (in_array($_FILES['fajl']['type'],$mime) && $_FILES['fajl']['size'] < 2000000) {
+    $kimenet = "<h3>Feltoltott fajl adatai</h3>
+    <ul>
+        <li>Fajlnev: {$_FILES['fajl'] ['name']}</li>
+        <li>Ideiglenes nev: {$_FILES['fajl'] ['tmp_name']}</li>
+        <li>Hibakod: {$_FILES['fajl'] ['error']}</li>
+        <li>Fajlmeret: {$_FILES['fajl'] ['size']} bytes</li>
+        <li>Fajltipus: {$_FILES['fajl'] ['type']} </li>
+    </ul>";
+
+    //uj fajlnev 
+    $fajl = ekezettelen($_FILES['fajl'] ['name']);
+        if(!file_exists("kepek/".$fajl)) {
+        move_uploaded_file($_FILES['fajl'] ['tmp_name'], "kepek/".$fajl);
+        }
+   }
 }
 ?><!DOCTYPE html>
 <html lang="en">
