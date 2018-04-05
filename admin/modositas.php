@@ -25,11 +25,27 @@ if(isset($_POST['rendben'])){
         $kimenet.="</ul>";
     }else{
     //Felvitel az adatbazisba
-    
-    $sql="...";
+    $id = (int)$_POST['id'];
+    $sql="UPDATE nevjegyek
+    SET nev = '{$nev}' , cegnev = '{$cegnev}', Mobil = '{$Mobil}', Email = '{$Email}'
+    WHERE id = {$id}";
     mysqli_query($dbconn,$sql);
     header("Location:lista.php");
     }
+}
+//urlap elozetes kitoltese
+else{
+    $id = (int)$_GET['id'];
+    $sql = "SELECT * 
+    FROM nevjegyek
+WHERE id = {$id}";
+$eredmeny = mysqli_query($dbconn, $sql);
+$sor = mysqli_fetch_assoc($eredmeny);
+
+$nev = $sor['nev'];
+$cegnev = $sor['cegnev'];
+$Mobil = $sor['Mobil'];
+$Email = $sor['Email'];
 }
 //urlap megjelenitese
 ?><!DOCTYPE html>
@@ -48,6 +64,7 @@ if(isset($_POST['rendben'])){
     <?php
         if(isset($kimenet)) print $kimenet;
     ?>
+    <input type="hidden" id="id" name="id" value="<?php print $id; ?>">
     <p><label for="nev">Nev:*</label></br>
        <input type="text" id="nev" name="nev" value="<?php print $nev ?>">
     </p>
