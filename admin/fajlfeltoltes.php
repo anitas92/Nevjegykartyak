@@ -23,7 +23,7 @@ if (isset($_POST['rendben'])){
     </ul>";
 
     //uj fajlnev 
-    $fajl = ekezettelen($_FILES['fajl'] ['name']);
+    $fajl = date("U-").ekezettelen($_FILES['fajl'] ['name']);
         if(!file_exists("kepek/".$fajl)) {
         move_uploaded_file($_FILES['fajl'] ['tmp_name'], "kepek/".$fajl);
         }
