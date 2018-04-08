@@ -13,7 +13,7 @@ if(isset($_POST['rendben'])) {
     //beleptetes
     } else {
         //sikeress
-        if($email == "jancsi@gmail.com" && $jelszo == "juliska") {
+        if($email == "jancsi@gmail.com" && sha1($jelszo) == "49cef48df229f6e608f4b57c11ef05c4f014f0c6") {
             $_SESSION['belepett']=true;
             header("Location:lista.php");
         //sikertelen
