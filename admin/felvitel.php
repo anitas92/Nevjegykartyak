@@ -1,4 +1,10 @@
 <?php
+//Lapvedelem
+session_start();
+if(!isset($_SESSION['belepett'])) {
+    header("Location: index.php");
+    exit();
+}
 //urlap feldolgozasa
 if(isset($_POST['rendben'])){
     //print_r($_POST);

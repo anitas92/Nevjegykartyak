@@ -1,4 +1,11 @@
 <?php
+//Lapvedelem
+session_start();
+if(!isset($_SESSION['belepett'])) {
+    header("Location: index.php");
+    exit();
+}
+
 require("../kapcsolat.php");
 
 $kifejezes = (isset($_POST['kifejezes'])) ? $_POST['kifejezes'] : "" ;
@@ -45,10 +52,10 @@ $kimenet.= "</table>\n";
     </form>
 
    
-    <p><a href="felvitel.php">Uj nevjegy </a></p>
+    <p><a href="felvitel.php">Uj nevjegy </a> | <a href="kilepes.php">Kilepes </a></p>
     <?php 
     print $kimenet 
     ?>
-     <p><a href="felvitel.php">Uj nevjegy </a></p>
+     <p><a href="felvitel.php">Uj nevjegy </a> | <a href="kilepes.php">Kilepes </a></p>
 </body>
 </html>

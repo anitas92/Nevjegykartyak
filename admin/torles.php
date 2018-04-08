@@ -1,4 +1,10 @@
 <?php
+//Lapvedelem
+session_start();
+if(!isset($_SESSION['belepett'])) {
+    header("Location: index.php");
+    exit();
+}
 
 if(isset($_GET['id'])) {
     require("../kapcsolat.php");

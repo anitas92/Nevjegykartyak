@@ -1,4 +1,13 @@
 <?php
+//Lapvedelem
+session_start();
+if(!isset($_SESSION['belepett'])) {
+    header("Location: index.php");
+    exit();
+}
+if (!isset($_REQUEST['id'])) header("Location: lista.php");
+
+
 require("../kapcsolat.php");
 //urlap feldolgozasa
 if(isset($_POST['rendben'])){
