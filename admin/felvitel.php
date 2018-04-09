@@ -9,10 +9,10 @@ if(!isset($_SESSION['belepett'])) {
 if(isset($_POST['rendben'])){
     //print_r($_POST);
     //valtozok tisztitasa
-    $nev = strip_tags(ucwords(strtolower(trim($_POST['nev']))));
+    $nev = strip_tags(mb_convert_case(mb_convert_case(trim($_POST['nev']), MB_CASE_LOWER, "UTF-8"), MB_CASE_TITLE));
     $cegnev = strip_tags(trim($_POST['cegnev']));
     $Mobil = strip_tags(trim($_POST['Mobil']));
-    $Email = strip_tags(strtolower(trim($_POST['Email'])));
+    $Email = strip_tags(mb_convert_case(trim($_POST['Email']), MB_CASE_LOWER, "UTF-8"));
 
     $mime = ["image/jpeg", "image/pjpeg", "image/gif", "image/png"];
     //valtozok vizsgalata
@@ -60,8 +60,7 @@ if(isset($_POST['rendben'])){
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Nevjegykartyak</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../stilus.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../stilus1.css" />
     <script src="main.js"></script>
 </head>
 <body>
