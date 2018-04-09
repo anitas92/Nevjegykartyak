@@ -45,6 +45,7 @@ if(@mysqli_num_rows($eredmeny) <1){
 $kimenet = "";
 while ($sor = mysqli_fetch_assoc($eredmeny)){
 $kimenet.= "<article>
+<img src=\"kepek/{$sor['foto']}\" alt=\"{$sor['nev']}\">
 <h2>{$sor['nev']}</h2>
 <h3>{$sor['cegnev']}</h3>
 <p>Mobil: <a href=\"tel:{$sor['Mobil']}\">{$sor['Mobil']}</a></p>
@@ -59,7 +60,7 @@ $kimenet.= "<article>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Nevjegykartyak</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="stilus.css" />
+    <link rel="stylesheet" type="text/css" href="stilus1.css" />
     <script src="main.js"></script>
 </head>
 <body>

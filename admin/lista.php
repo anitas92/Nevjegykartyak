@@ -7,27 +7,30 @@ if(!isset($_SESSION['belepett'])) {
 }
 
 require("../kapcsolat.php");
-
+$rendez = (isset($_GET['rendez'])) ? $_GET['rendez'] : "nev" ;
 $kifejezes = (isset($_POST['kifejezes'])) ? $_POST['kifejezes'] : "" ;
+
 $sql = "SELECT *
 FROM nevjegyek
 WHERE nev LIKE '%{$kifejezes}%'
 OR cegnev LIKE '%{$kifejezes}%'
 OR Mobil LIKE '%{$kifejezes}%'
 OR Email LIKE '%{$kifejezes}%'
-ORDER by nev ASC";
+ORDER by {$rendez} ASC";
 $eredmeny = mysqli_query($dbconn, $sql);
 $kimenet = "<table>
 <tr>
-<th>Nev</th>
-<th>Cegnev</th>
-<th>Mobil</th>
-<th>Email</th>
+<th>Foto</th>
+<th><a href=\"?rendez=nev\">Nev</a></th>
+<th><a href=\"?rendez=cegnev\">Cegnev</a></th>
+<th><a href=\"?rendez=Mobil\">Mobil</a></th>
+<th><a href=\"?rendez=Email\">Email</a></th>
 <th>Müvelet</th>
 </tr>";
 while ($sor = mysqli_fetch_assoc($eredmeny)){
     $kimenet.="<tr>
-    <td>{$sor['nev']}</td>
+    <td><img src=\"../kepek/{$sor['foto']}\" alt=\"{$sor['nev']}\"></td>
+    <td >{$sor['nev']}</td>
     <td>{$sor['cegnev']}</td>
     <td>{$sor['Mobil']}</td>
     <td>{$sor['Email']}</td>
@@ -41,9 +44,8 @@ $kimenet.= "</table>\n";
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Nevjegykartyak</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../stilus.css" />
-    <script src="main.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../stilus1.css" />
 </head>
 <body>
     <h1>Nevjegykartyak</h1>

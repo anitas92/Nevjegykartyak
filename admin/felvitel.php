@@ -14,6 +14,7 @@ if(isset($_POST['rendben'])){
     $Mobil = strip_tags(trim($_POST['Mobil']));
     $Email = strip_tags(strtolower(trim($_POST['Email'])));
 
+    $mime = ["image/jpeg", "image/pjpeg", "image/gif", "image/png"];
     //valtozok vizsgalata
     if(empty($nev)) $hibak[] = "Nem adtal meg nevet!";
     elseif(strlen($nev) < 5) $hibak[] = "Rossz nevet adtal meg!";
@@ -21,6 +22,19 @@ if(isset($_POST['rendben'])){
     if(!empty($Mobil) && strlen($Mobil)< 9) $hibak[] = "Rossz mobil szamot adtal meg!";
 
     if(!empty($Email) && !filter_var($Email,FILTER_VALIDATE_EMAIL)) $hibak[]= "Rossz e-mail cimet adtal meg!";
+
+    if($_FILES['foto']['error'] == 0 && $_FILES['foto']['size'] > 2000000) 
+    $hibak[] = "Tul nagy kepet toltottel fel!";
+    if($_FILES['foto']['error'] == 0 && !in_array($_FILES['foto']['type'],$mime)) 
+    $hibak[] = "NEm megfelelo kepformatum!";
+
+    //Filenev elkeszitese
+    switch($_FILES['foto']['type']) {
+        case "image/png": $kit=".png"; break;
+        case "image/gif": $kit=".gif"; break;
+        default: $kit = ".jpg";
+    }
+    $foto = date("U").$kit;
 
     if(isset($hibak)) {
         $kimenet = "<ul>\n";
@@ -31,8 +45,11 @@ if(isset($_POST['rendben'])){
     }else{
     //Felvitel az adatbazisba
     require("../kapcsolat.php");
-    $sql="INSERT INTO `nevjegyek` (`nev`, `cegnev`, `Mobil`, `Email`) VALUES ('{$nev}', '{$cegnev}', '{$Mobil}', '{$Email}');";
+    $sql="INSERT INTO `nevjegyek` (`foto`,`nev`, `cegnev`, `Mobil`, `Email`) VALUES ('{$foto}','{$nev}', '{$cegnev}', '{$Mobil}', '{$Email}');";
     mysqli_query($dbconn,$sql);
+
+    //kep mozgatasa a vegleges helyere
+    move_uploaded_file($_FILES['foto']['tmp_name'], "../kepek/{$foto}");
     header("Location:lista.php");
     }
 }
@@ -49,10 +66,15 @@ if(isset($_POST['rendben'])){
 </head>
 <body>
     <h1>Nevjegykartyak</h1>
-    <form method="post" action="">
+    <form method="post" action="" enctype="multipart/form-data">
     <?php
         if(isset($kimenet)) print $kimenet;
     ?>
+
+    <input type="hidden" name="MAX_FILES_SIZE" value="2000000"/>
+    <p><label for="foto">Foto:</label></br>
+       <input type="file" id="foto" name="foto">
+    </p>
     <p><label for="nev">Nev:*</label></br>
        <input type="text" id="nev" name="nev" value="<?php if(isset($nev)) print $nev ?>">
     </p>
