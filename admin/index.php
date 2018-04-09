@@ -3,17 +3,24 @@ session_start();
 if(isset($_POST['rendben'])) {
 //valtozok tisztitasa
     $email = strip_tags(strtolower(trim($_POST['email'])));
-    $jelszo = strip_tags($_POST['jelszo']);
+    $jelszo = $_POST['jelszo'];
 
 //valtozok ellenorzese
     if(empty($email) || 
     !filter_var($email, FILTER_VALIDATE_EMAIL) || 
     !preg_match("/^[a-zA-Z ]*$/", $jelszo)) {
-        $hiba ="Hibas E-mail cimet vagy jelszot adtal meg!";
+        $hiba ="ribas E-mail cimet vagy jelszot adtal meg!";
     //beleptetes
     } else {
+        require("../kapcsolat.php");
+        $sql = "SELECT *
+        FROM felhasznalok
+        WHERE email = '{$email}'
+        AND jelszo = '{$jelszo}'";
+        $eredmeny = mysqli_query($dbconn, $sql);
+        
         //sikeress
-        if($email == "jancsi@gmail.com" && sha1($jelszo) == "49cef48df229f6e608f4b57c11ef05c4f014f0c6") {
+        if (mysqli_num_rows($eredmeny) > 0) {
             $_SESSION['belepett']=true;
             header("Location:lista.php");
         //sikertelen
